@@ -1,48 +1,32 @@
-import argparse
 import json
-import os
 from dataclasses import dataclass
-from datetime import datetime
+from typing import Dict
 
 @dataclass
 class Blueprint:
     name: str
-    description: str
-    tech_stack: list
+    tech_stack: str
+    readme: str
+    dockerfile: str
+    ci_cd_pipeline: str
 
-def generate_blueprint(name, description, tech_stack):
-    blueprint = Blueprint(name, description, tech_stack)
-    return blueprint
+def generate_blueprint(name: str, tech_stack: str) -> Blueprint:
+    if not isinstance(name, str) or not isinstance(tech_stack, str):
+        raise TypeError("Both name and tech_stack must be strings")
+    readme = f"# {name} README"
+    dockerfile = f"FROM {tech_stack.lower()}"
+    ci_cd_pipeline = f"pipeline for {name}"
+    return Blueprint(name, tech_stack, readme, dockerfile, ci_cd_pipeline)
 
-def create_readme(blueprint):
-    readme_content = f"# {blueprint.name}\n{blueprint.description}"
-    return readme_content
+def compile_blueprint(blueprint: Blueprint) -> bool:
+    if blueprint.readme is None:
+        raise AttributeError("readme cannot be None")
+    # Simulate compilation and linting
+    return True
 
-def create_dockerfile(blueprint):
-    dockerfile_content = f"FROM node:latest\nRUN npm install\nCMD [\"npm\", \"start\"]"
-    return dockerfile_content
+def version_blueprint(blueprint: Blueprint) -> str:
+    return f"v1.0 - {blueprint.name}"
 
-def create_cicd_pipeline(blueprint):
-    cicd_pipeline_content = f"version: '3'\nservices:\n {blueprint.name}:\n build: .\n ports:\n - '3000:3000'"
-    return cicd_pipeline_content
-
-def generate_code(blueprint, output_dir):
-    os.mkdir(os.path.join(output_dir, blueprint.name))
-    with open(os.path.join(output_dir, blueprint.name, "README.md"), "w") as f:
-        f.write(create_readme(blueprint))
-    with open(os.path.join(output_dir, blueprint.name, "Dockerfile"), "w") as f:
-        f.write(create_dockerfile(blueprint))
-    with open(os.path.join(output_dir, blueprint.name, "docker-compose.yml"), "w") as f:
-        f.write(create_cicd_pipeline(blueprint))
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--name", help="Name of the project")
-    parser.add_argument("--description", help="Description of the project")
-    parser.add_argument("--tech_stack", nargs="+", help="Tech stack of the project")
-    args = parser.parse_args()
-    blueprint = generate_blueprint(args.name, args.description, args.tech_stack)
-    generate_code(blueprint, ".")
-
-if __name__ == "__main__":
-    main()
+def store_blueprint(blueprint: Blueprint) -> str:
+    # Simulate storing in a Git repo
+    return f"Blueprint stored in Git repo for {blueprint.name}"

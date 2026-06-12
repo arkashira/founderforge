@@ -1,31 +1,32 @@
-import os
+from src.blueprint_generator import generate_blueprint, compile_blueprint, version_blueprint, store_blueprint
 import pytest
-from src.blueprint_generator import generate_blueprint, create_readme, create_dockerfile, create_cicd_pipeline, generate_code
 
 def test_generate_blueprint():
-    blueprint = generate_blueprint("test_project", "This is a test project", ["React", "Node", "PostgreSQL"])
-    assert blueprint.name == "test_project"
-    assert blueprint.description == "This is a test project"
-    assert blueprint.tech_stack == ["React", "Node", "PostgreSQL"]
+    blueprint = generate_blueprint("My App", "Node")
+    assert blueprint.name == "My App"
+    assert blueprint.tech_stack == "Node"
+    assert blueprint.readme == "# My App README"
+    assert blueprint.dockerfile == "FROM node"
+    assert blueprint.ci_cd_pipeline == "pipeline for My App"
 
-def test_create_readme():
-    blueprint = generate_blueprint("test_project", "This is a test project", ["React", "Node", "PostgreSQL"])
-    readme_content = create_readme(blueprint)
-    assert readme_content == "# test_project\nThis is a test project"
+def test_compile_blueprint():
+    blueprint = generate_blueprint("My App", "Node")
+    assert compile_blueprint(blueprint) == True
 
-def test_create_dockerfile():
-    blueprint = generate_blueprint("test_project", "This is a test project", ["React", "Node", "PostgreSQL"])
-    dockerfile_content = create_dockerfile(blueprint)
-    assert dockerfile_content == "FROM node:latest\nRUN npm install\nCMD [\"npm\", \"start\"]"
+def test_version_blueprint():
+    blueprint = generate_blueprint("My App", "Node")
+    assert version_blueprint(blueprint) == "v1.0 - My App"
 
-def test_create_cicd_pipeline():
-    blueprint = generate_blueprint("test_project", "This is a test project", ["React", "Node", "PostgreSQL"])
-    cicd_pipeline_content = create_cicd_pipeline(blueprint)
-    assert cicd_pipeline_content == "version: '3'\nservices:\n test_project:\n build: .\n ports:\n - '3000:3000'"
+def test_store_blueprint():
+    blueprint = generate_blueprint("My App", "Node")
+    assert store_blueprint(blueprint) == "Blueprint stored in Git repo for My App"
 
-def test_generate_code(tmp_path):
-    blueprint = generate_blueprint("test_project", "This is a test project", ["React", "Node", "PostgreSQL"])
-    generate_code(blueprint, tmp_path)
-    assert os.path.exists(os.path.join(tmp_path, "test_project", "README.md"))
-    assert os.path.exists(os.path.join(tmp_path, "test_project", "Dockerfile"))
-    assert os.path.exists(os.path.join(tmp_path, "test_project", "docker-compose.yml"))
+def test_generate_blueprint_edge_case():
+    with pytest.raises(TypeError):
+        generate_blueprint(123, "Node")
+
+def test_compile_blueprint_edge_case():
+    blueprint = generate_blueprint("My App", "Node")
+    blueprint.readme = None
+    with pytest.raises(AttributeError):
+        compile_blueprint(blueprint)

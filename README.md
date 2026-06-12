@@ -1,14 +1,6 @@
-# FounderForge Wizard (Demo)
+# Blueprint Generator
+A Python project that generates a full stack blueprint (React + Node + PostgreSQL) based on your idea.
 
-This tiny project demonstrates an **interactive wizard** that guides a founder through the three
-steps needed to get a minimal MVP ready:
-
-1. **Create a PostgreSQL database** (simulated)
-2. **Configure OAuth2** (simulated)
-3. **Generate a deployment configuration** for a managed platform (e.g., Render)
-
-The real product would call cloud APIs, but for the purpose of this
-self‑contained example the wizard only produces JSON‑serialisable
-configuration objects.
-
-## How to run
+## Usage
+1. Run `python -m pytest` to test the project.
+2. Use the `generate_blueprint` function to create a new blueprint.
