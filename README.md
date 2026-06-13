@@ -1,6 +1,15 @@
-# Blueprint Generator
-A Python project that generates a full stack blueprint (React + Node + PostgreSQL) based on your idea.
+# Founder Forge
+A platform for founders to access a knowledge base and community forum.
+
+## Features
+* Knowledge base with searchable articles
+* Community forum with searchable posts
+* Satisfaction rating system
 
 ## Usage
-1. Run `python -m pytest` to test the project.
-2. Use the `generate_blueprint` function to create a new blueprint.
+1. Create a knowledge base article: `knowledge_base.add_article(article)`
+2. Create a community forum post: `community_forum.add_post(post)`
+3. Search for articles and posts: `founder_forge.search(query)`
+
+## Testing
+Run tests using `pytest`
